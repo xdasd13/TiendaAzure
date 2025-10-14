@@ -1,6 +1,7 @@
 <?php
 
-require_once '../Models/Tienda.php';
+require_once __DIR__ . '/../Models/Tienda.php';
+require_once __DIR__ . '/../helpers/ImageHelper.php';
 
 class TiendaController {
     private $tienda;
@@ -21,24 +22,46 @@ class TiendaController {
 
     public function crear() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $datos = [
-                'nomproducto' => $_POST['nomproducto'] ?? '',
-                'precio' => floatval($_POST['precio'] ?? 0),
-                'stock' => intval($_POST['stock'] ?? 0),
-                'disponible' => isset($_POST['disponible']) ? 1 : 0,
-                'imagen' => $_POST['imagen'] ?? '',
-                'categoria_id' => intval($_POST['categoria_id'] ?? 1)
-            ];
-
-            if ($this->validarDatos($datos)) {
-                if ($this->tienda->crearProducto($datos)) {
-                    header('Location: index.php?mensaje=producto_creado');
-                    exit;
+            $imagenFilename = '';
+            
+            // Manejar subida de imagen
+            if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+                $uploadResult = ImageHelper::uploadImage($_FILES['imagen']);
+                if ($uploadResult['success']) {
+                    $imagenFilename = $uploadResult['filename'];
                 } else {
-                    $error = "Error al crear el producto";
+                    $error = $uploadResult['error'];
                 }
-            } else {
-                $error = "Datos inválidos";
+            }
+            
+            if (!isset($error)) {
+                $datos = [
+                    'nomproducto' => $_POST['nomproducto'] ?? '',
+                    'precio' => floatval($_POST['precio'] ?? 0),
+                    'stock' => intval($_POST['stock'] ?? 0),
+                    'disponible' => isset($_POST['disponible']) ? 1 : 0,
+                    'imagen' => $imagenFilename,
+                    'categoria_id' => intval($_POST['categoria_id'] ?? 1)
+                ];
+
+                if ($this->validarDatos($datos)) {
+                    if ($this->tienda->crearProducto($datos)) {
+                        header('Location: ../../index.php?mensaje=producto_creado');
+                        exit;
+                    } else {
+                        $error = "Error al crear el producto";
+                        // Eliminar imagen si falló la creación
+                        if ($imagenFilename) {
+                            ImageHelper::deleteImage($imagenFilename);
+                        }
+                    }
+                } else {
+                    $error = "Datos inválidos";
+                    // Eliminar imagen si los datos son inválidos
+                    if ($imagenFilename) {
+                        ImageHelper::deleteImage($imagenFilename);
+                    }
+                }
             }
         }
 
@@ -50,24 +73,43 @@ class TiendaController {
         $id = intval($_GET['id'] ?? 0);
         
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $datos = [
-                'nomproducto' => $_POST['nomproducto'] ?? '',
-                'precio' => floatval($_POST['precio'] ?? 0),
-                'stock' => intval($_POST['stock'] ?? 0),
-                'disponible' => isset($_POST['disponible']) ? 1 : 0,
-                'imagen' => $_POST['imagen'] ?? '',
-                'categoria_id' => intval($_POST['categoria_id'] ?? 1)
-            ];
-
-            if ($this->validarDatos($datos)) {
-                if ($this->tienda->actualizarProducto($id, $datos)) {
-                    header('Location: listar.php?mensaje=producto_actualizado');
-                    exit;
+            $producto = $this->tienda->obtenerProductoPorId($id);
+            $imagenFilename = $producto['imagen']; // Mantener imagen actual por defecto
+            
+            // Manejar nueva imagen si se subió
+            if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+                $uploadResult = ImageHelper::uploadImage($_FILES['imagen']);
+                if ($uploadResult['success']) {
+                    // Eliminar imagen anterior si existe
+                    if ($producto['imagen']) {
+                        ImageHelper::deleteImage($producto['imagen']);
+                    }
+                    $imagenFilename = $uploadResult['filename'];
                 } else {
-                    $error = "Error al actualizar el producto";
+                    $error = $uploadResult['error'];
                 }
-            } else {
-                $error = "Datos inválidos";
+            }
+            
+            if (!isset($error)) {
+                $datos = [
+                    'nomproducto' => $_POST['nomproducto'] ?? '',
+                    'precio' => floatval($_POST['precio'] ?? 0),
+                    'stock' => intval($_POST['stock'] ?? 0),
+                    'disponible' => isset($_POST['disponible']) ? 1 : 0,
+                    'imagen' => $imagenFilename,
+                    'categoria_id' => intval($_POST['categoria_id'] ?? 1)
+                ];
+
+                if ($this->validarDatos($datos)) {
+                    if ($this->tienda->actualizarProducto($id, $datos)) {
+                        header('Location: listar.php?mensaje=producto_actualizado');
+                        exit;
+                    } else {
+                        $error = "Error al actualizar el producto";
+                    }
+                } else {
+                    $error = "Datos inválidos";
+                }
             }
         }
 
@@ -86,7 +128,14 @@ class TiendaController {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = intval($_POST['id'] ?? 0);
             
+            // Obtener producto para eliminar su imagen
+            $producto = $this->tienda->obtenerProductoPorId($id);
+            
             if ($this->tienda->eliminarProducto($id)) {
+                // Eliminar imagen del servidor
+                if ($producto && $producto['imagen']) {
+                    ImageHelper::deleteImage($producto['imagen']);
+                }
                 header('Location: listar.php?mensaje=producto_eliminado');
             } else {
                 header('Location: listar.php?error=error_eliminar');
@@ -99,7 +148,6 @@ class TiendaController {
         return !empty($datos['nomproducto']) && 
                $datos['precio'] > 0 && 
                $datos['stock'] >= 0 && 
-               !empty($datos['imagen']) && 
                $datos['categoria_id'] > 0;
     }
 

@@ -24,8 +24,8 @@ INSERT INTO  categorias (nombre) VALUES ('Electrodomesticos'), ('Hogar'), ('Ropa
 
 
 INSERT INTO productos (nomproducto, precio, stock, disponible, imagen, categoria_id) VALUES 
-('Laptop', 1000.00, 100, true, 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400', 1),
-('Televisor', 1806.00, 56, true, 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400', 1),
-('Juego de comedor', 452.88, 23, true, 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400', 2),
-('Camiseta', 32.00, 213, true, 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400', 3),
-('Zapatillas', 120.00, 61, true, 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400', 3);
+('Laptop', 1000.00, 100, true, 'laptop.jpg', 1),
+('Televisor', 1806.00, 56, true, 'televisor.jpg', 1),
+('Juego de comedor', 452.88, 23, true, 'comedor.jpg', 2),
+('Camiseta', 32.00, 213, true, 'camiseta.jpg', 3),
+('Zapatillas', 120.00, 61, true, 'zapatillas.jpg', 3);

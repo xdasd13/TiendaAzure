@@ -1,6 +1,5 @@
 <?php
-require_once '../Controllers/TiendaController.php';
-$controller = new TiendaController();
+require_once __DIR__ . '/../Controllers/TiendaController.php';
 
 if (!isset($productos)) {
     $tienda = new Tienda();
@@ -24,16 +23,16 @@ if (!isset($productos)) {
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f8fafc;
             min-height: 100vh;
             color: #333;
         }
 
         .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1rem 0;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            background: #ffffff;
+            border-bottom: 2px solid #e2e8f0;
+            padding: 1.5rem 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -49,10 +48,11 @@ if (!isset($productos)) {
         }
 
         .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #4f46e5;
+            font-size: 2rem;
+            font-weight: 600;
+            color: #1e40af;
             text-decoration: none;
+            letter-spacing: -0.5px;
         }
 
         .nav-links {
@@ -69,44 +69,52 @@ if (!isset($productos)) {
         }
 
         .nav-link:hover {
-            color: #4f46e5;
+            color: #1e40af;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            background: #1e40af;
             color: white;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 8px;
+            padding: 0.875rem 2rem;
+            border: 2px solid #1e40af;
+            border-radius: 6px;
             text-decoration: none;
-            font-weight: 600;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            font-weight: 500;
+            transition: all 0.3s ease;
             display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.875rem;
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3);
+            background: #1d4ed8;
+            border-color: #1d4ed8;
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
         }
 
         .hero {
             text-align: center;
-            padding: 4rem 2rem;
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
             color: white;
+            border-bottom: 4px solid #1d4ed8;
         }
 
         .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            font-size: 3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            letter-spacing: -1px;
         }
 
         .hero p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            max-width: 600px;
+            font-size: 1.125rem;
+            opacity: 0.95;
+            max-width: 650px;
             margin: 0 auto 2rem;
+            line-height: 1.6;
         }
 
         .container {
@@ -117,18 +125,32 @@ if (!isset($productos)) {
 
         .products-section {
             background: white;
-            margin: -2rem 2rem 2rem;
-            border-radius: 20px;
-            padding: 3rem;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin: 3rem 2rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 4rem 3rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
         }
 
         .section-title {
             text-align: center;
-            font-size: 2.5rem;
-            font-weight: 700;
+            font-size: 2.25rem;
+            font-weight: 600;
             color: #1f2937;
             margin-bottom: 3rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: #1e40af;
         }
 
         .products-grid {
@@ -140,16 +162,17 @@ if (!isset($productos)) {
 
         .product-card {
             background: white;
-            border-radius: 16px;
+            border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid #f1f5f9;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 2px solid #e2e8f0;
         }
 
         .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            border-color: #1e40af;
         }
 
         .product-image {
@@ -164,12 +187,16 @@ if (!isset($productos)) {
         }
 
         .product-category {
-            color: #6366f1;
-            font-size: 0.875rem;
+            color: #1e40af;
+            font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+            margin-bottom: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            background: #eff6ff;
+            border-radius: 4px;
+            display: inline-block;
         }
 
         .product-name {
@@ -215,11 +242,12 @@ if (!isset($productos)) {
         }
 
         .footer {
-            background: #1f2937;
+            background: #1e40af;
             color: white;
             text-align: center;
-            padding: 2rem;
+            padding: 3rem 2rem;
             margin-top: 4rem;
+            border-top: 4px solid #1d4ed8;
         }
 
         .message {
@@ -291,10 +319,14 @@ if (!isset($productos)) {
                 <div class="products-grid">
                     <?php foreach ($productos as $producto): ?>
                         <div class="product-card">
-                            <img src="<?php echo htmlspecialchars($producto['imagen']); ?>" 
+                            <?php 
+                            require_once __DIR__ . '/../helpers/ImageHelper.php';
+                            $imagePath = ImageHelper::getImagePath($producto['imagen']);
+                            ?>
+                            <img src="<?php echo htmlspecialchars($imagePath); ?>" 
                                  alt="<?php echo htmlspecialchars($producto['nomproducto']); ?>" 
                                  class="product-image"
-                                 onerror="this.src='https://via.placeholder.com/400x250/e2e8f0/64748b?text=Sin+Imagen'">
+                                 onerror="this.src='<?php echo ImageHelper::getDefaultImagePath(); ?>'">
                             <div class="product-info">
                                 <div class="product-category"><?php echo htmlspecialchars($producto['categoria_nombre']); ?></div>
                                 <h3 class="product-name"><?php echo htmlspecialchars($producto['nomproducto']); ?></h3>

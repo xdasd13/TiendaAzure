@@ -72,8 +72,15 @@ tiendaAzure/
 │   │       ├── crear.php           # Formulario crear producto
 │   │       ├── editar.php          # Formulario editar producto
 │   │       └── listar.php          # Lista de productos
+│   ├── helpers/
+│   │   └── ImageHelper.php         # Utilidades para manejo de imágenes
 │   └── database/
 │       └── db.sql                  # Script de base de datos
+├── assets/
+│   └── images/
+│       ├── productos/              # Directorio para imágenes de productos
+│       ├── no-image.svg           # Imagen por defecto
+│       └── .gitkeep               # Mantener estructura de directorios
 ├── index.php                      # Punto de entrada
 └── README.md                      # Este archivo
 ```
@@ -96,7 +103,7 @@ tiendaAzure/
 - **Precio**: Precio en formato decimal
 - **Stock**: Cantidad disponible
 - **Categoría**: Selección de categoría existente
-- **Imagen**: URL de imagen del producto
+- **Imagen**: Archivo de imagen (JPG, PNG, GIF, WEBP - máximo 5MB)
 - **Disponible**: Estado de disponibilidad
 
 ## Base de Datos
@@ -113,7 +120,7 @@ tiendaAzure/
 - `precio`: Precio decimal
 - `stock`: Cantidad en inventario
 - `disponible`: Estado booleano
-- `imagen`: URL de la imagen
+- `imagen`: Nombre del archivo de imagen
 - `created_at`: Fecha de creación
 - `updated_at`: Fecha de actualización
 - `categoria_id`: Clave foránea a categorias
@@ -124,6 +131,8 @@ tiendaAzure/
 - Validación de datos en servidor
 - Escape de caracteres HTML
 - Consultas preparadas (PDO)
+- Validación de tipos de archivo de imagen
+- Límite de tamaño de archivos (5MB)
 
 ### Diseño
 - Responsive design
@@ -132,10 +141,13 @@ tiendaAzure/
 - Efectos hover y transiciones
 
 ### Funcionalidades
-- Vista previa de imágenes
+- Subida y gestión de archivos de imagen
+- Vista previa de imágenes en tiempo real
+- Redimensionamiento automático de imágenes
 - Confirmación de eliminación
 - Mensajes de estado
 - Manejo de errores
+- Imagen por defecto para productos sin imagen
 
 ## Solución de Problemas
 
@@ -145,8 +157,14 @@ tiendaAzure/
 - Asegurar que la base de datos `tiendaAlonso` existe
 
 ### Imágenes No Se Muestran
-- Verificar que las URLs de imágenes sean válidas
-- Comprobar conexión a internet para imágenes externas
+- Verificar permisos de escritura en `assets/images/productos/`
+- Comprobar que los archivos de imagen existen en el servidor
+- Verificar que el directorio `assets/images/` tiene los permisos correctos
+
+### Errores de Subida de Imágenes
+- Verificar que el archivo no exceda 5MB
+- Comprobar que el formato sea JPG, PNG, GIF o WEBP
+- Asegurar que PHP tenga permisos para crear directorios
 
 ### Errores de PHP
 - Verificar versión de PHP (7.4+)

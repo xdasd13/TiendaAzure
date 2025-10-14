@@ -1,5 +1,5 @@
 <?php
-require_once '../../Controllers/TiendaController.php';
+require_once __DIR__ . '/../../Controllers/TiendaController.php';
 
 $tienda = new Tienda();
 $productos = $tienda->obtenerTodosLosProductos();
@@ -21,16 +21,16 @@ $productos = $tienda->obtenerTodosLosProductos();
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f8fafc;
             min-height: 100vh;
             color: #333;
         }
 
         .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1rem 0;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            background: #ffffff;
+            border-bottom: 2px solid #e2e8f0;
+            padding: 1.5rem 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -46,10 +46,11 @@ $productos = $tienda->obtenerTodosLosProductos();
         }
 
         .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #4f46e5;
+            font-size: 2rem;
+            font-weight: 600;
+            color: #1e40af;
             text-decoration: none;
+            letter-spacing: -0.5px;
         }
 
         .nav-links {
@@ -66,24 +67,28 @@ $productos = $tienda->obtenerTodosLosProductos();
         }
 
         .nav-link:hover {
-            color: #4f46e5;
+            color: #1e40af;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            background: #1e40af;
             color: white;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 8px;
+            padding: 0.875rem 2rem;
+            border: 2px solid #1e40af;
+            border-radius: 6px;
             text-decoration: none;
-            font-weight: 600;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            font-weight: 500;
+            transition: all 0.3s ease;
             display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.875rem;
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3);
+            background: #1d4ed8;
+            border-color: #1d4ed8;
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
         }
 
         .container {
@@ -94,26 +99,40 @@ $productos = $tienda->obtenerTodosLosProductos();
 
         .page-header {
             background: white;
-            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
             padding: 2rem;
             margin-bottom: 2rem;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .page-title {
-            font-size: 2.5rem;
-            font-weight: 700;
+            font-size: 2.25rem;
+            font-weight: 600;
             color: #1f2937;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: #1e40af;
         }
 
         .products-container {
             background: white;
-            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
             padding: 2rem;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
         }
 
         .message {
@@ -173,7 +192,7 @@ $productos = $tienda->obtenerTodosLosProductos();
         }
 
         .product-category {
-            color: #6366f1;
+            color: #1e40af;
             font-size: 0.875rem;
             font-weight: 500;
         }
@@ -235,12 +254,12 @@ $productos = $tienda->obtenerTodosLosProductos();
         }
 
         .btn-edit {
-            background: #3b82f6;
+            background: #1e40af;
             color: white;
         }
 
         .btn-edit:hover {
-            background: #2563eb;
+            background: #1d4ed8;
             transform: translateY(-1px);
         }
 
@@ -404,10 +423,14 @@ $productos = $tienda->obtenerTodosLosProductos();
                         <?php foreach ($productos as $producto): ?>
                             <tr>
                                 <td>
-                                    <img src="<?php echo htmlspecialchars($producto['imagen']); ?>" 
+                                    <?php 
+                                    require_once __DIR__ . '/../../helpers/ImageHelper.php';
+                                    $imagePath = ImageHelper::getImagePath($producto['imagen']);
+                                    ?>
+                                    <img src="<?php echo htmlspecialchars($imagePath); ?>" 
                                          alt="<?php echo htmlspecialchars($producto['nomproducto']); ?>" 
                                          class="product-image"
-                                         onerror="this.src='https://via.placeholder.com/60x60/e2e8f0/64748b?text=N/A'">
+                                         onerror="this.src='<?php echo ImageHelper::getDefaultImagePath(); ?>'">
                                 </td>
                                 <td>
                                     <div class="product-name"><?php echo htmlspecialchars($producto['nomproducto']); ?></div>

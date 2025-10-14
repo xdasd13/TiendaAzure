@@ -1,5 +1,5 @@
 <?php
-require_once '../../Controllers/TiendaController.php';
+require_once __DIR__ . '/../../Controllers/TiendaController.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $controller = new TiendaController();
@@ -26,16 +26,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f8fafc;
             min-height: 100vh;
             color: #333;
         }
 
         .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1rem 0;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            background: #ffffff;
+            border-bottom: 2px solid #e2e8f0;
+            padding: 1.5rem 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -51,10 +51,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #4f46e5;
+            font-size: 2rem;
+            font-weight: 600;
+            color: #1e40af;
             text-decoration: none;
+            letter-spacing: -0.5px;
         }
 
         .nav-links {
@@ -71,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .nav-link:hover {
-            color: #4f46e5;
+            color: #1e40af;
         }
 
         .container {
@@ -82,9 +83,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         .form-container {
             background: white;
-            border-radius: 20px;
-            padding: 3rem;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 4rem 3rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
         }
 
         .form-header {
@@ -93,10 +95,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .form-title {
-            font-size: 2.5rem;
-            font-weight: 700;
+            font-size: 2.25rem;
+            font-weight: 600;
             color: #1f2937;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .form-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: #1e40af;
         }
 
         .form-subtitle {
@@ -128,8 +143,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         .form-input:focus, .form-select:focus {
             outline: none;
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            border-color: #1e40af;
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
         }
 
         .checkbox-group {
@@ -142,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .checkbox-input {
             width: 1.2rem;
             height: 1.2rem;
-            accent-color: #4f46e5;
+            accent-color: #1e40af;
         }
 
         .checkbox-label {
@@ -171,14 +186,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            background: #1e40af;
             color: white;
+            border: 2px solid #1e40af;
             flex: 1;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.875rem;
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3);
+            background: #1d4ed8;
+            border-color: #1d4ed8;
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
         }
 
         .btn-secondary {
@@ -269,7 +289,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             <?php endif; ?>
 
-            <form method="POST" action="">
+            <form method="POST" action="" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="nomproducto" class="form-label">Nombre del Producto *</label>
                     <input type="text" 
@@ -324,15 +344,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <div class="form-group">
-                    <label for="imagen" class="form-label">URL de la Imagen *</label>
-                    <input type="url" 
+                    <label for="imagen" class="form-label">Imagen del Producto *</label>
+                    <input type="file" 
                            id="imagen" 
                            name="imagen" 
                            class="form-input" 
+                           accept="image/*"
                            required 
-                           placeholder="https://ejemplo.com/imagen.jpg"
-                           value="<?php echo isset($_POST['imagen']) ? htmlspecialchars($_POST['imagen']) : ''; ?>"
-                           onchange="previewImage(this.value)">
+                           onchange="previewImage(this)">
+                    <small style="color: #6b7280; font-size: 0.875rem; margin-top: 0.5rem; display: block;">
+                        Formatos permitidos: JPG, PNG, GIF, WEBP. Tamaño máximo: 5MB
+                    </small>
                     <div id="imagePreview" class="image-preview">
                         <img id="previewImg" src="" alt="Vista previa">
                     </div>
@@ -358,30 +380,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <script>
-        function previewImage(url) {
+        function previewImage(input) {
             const preview = document.getElementById('imagePreview');
             const img = document.getElementById('previewImg');
             
-            if (url) {
-                img.src = url;
-                img.onload = function() {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    img.src = e.target.result;
                     preview.style.display = 'block';
                 };
-                img.onerror = function() {
-                    preview.style.display = 'none';
-                };
+                
+                reader.readAsDataURL(input.files[0]);
             } else {
                 preview.style.display = 'none';
             }
         }
-
-        // Preview image if there's a value on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            const imageInput = document.getElementById('imagen');
-            if (imageInput.value) {
-                previewImage(imageInput.value);
-            }
-        });
     </script>
 </body>
 </html>
