@@ -57,4 +57,4 @@ jobs:
           app-name: 'AlonsoStore'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E629492045264F4093450830CDAA1FAA }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E554FFC3D7884566B39E2B0135AE8756 }}
