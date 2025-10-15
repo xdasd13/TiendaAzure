@@ -1,31 +1,44 @@
+-- Crear la base de datos
 CREATE DATABASE tiendaAlonso;
+GO
+
+-- Usar la base de datos
 USE tiendaAlonso;
+GO
 
-
+-- Crear tabla categorias
 CREATE TABLE categorias (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    nombre VARCHAR(100) NOT NULL
-)ENGINE=INNODB;
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    nombre NVARCHAR(100) NOT NULL
+);
+GO
 
+-- Crear tabla productos
 CREATE TABLE productos (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    nomproducto VARCHAR(100) NOT NULL,
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    nomproducto NVARCHAR(100) NOT NULL,
     precio DECIMAL(10,2) NOT NULL,
     stock INT NOT NULL,
-    disponible BOOLEAN NOT NULL,
-    imagen VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    disponible BIT NOT NULL,
+    imagen NVARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT GETDATE(),
+    updated_at DATETIME DEFAULT GETDATE(),
     categoria_id INT NOT NULL,
     FOREIGN KEY (categoria_id) REFERENCES categorias(id)
-)ENGINE=INNODB;
+);
+GO
 
-INSERT INTO  categorias (nombre) VALUES ('Electrodomesticos'), ('Hogar'), ('Ropa'), ('Otros');
+-- Insertar categorías
+INSERT INTO categorias (nombre)
+VALUES ('Electrodomésticos'), ('Hogar'), ('Ropa'), ('Otros');
+GO
 
-
-INSERT INTO productos (nomproducto, precio, stock, disponible, imagen, categoria_id) VALUES 
-('Laptop', 1000.00, 100, true, 'laptop.jpg', 1),
-('Televisor', 1806.00, 56, true, 'televisor.jpg', 1),
-('Juego de comedor', 452.88, 23, true, 'comedor.jpg', 2),
-('Camiseta', 32.00, 213, true, 'camiseta.jpg', 3),
-('Zapatillas', 120.00, 61, true, 'zapatillas.jpg', 3);
+-- Insertar productos
+INSERT INTO productos (nomproducto, precio, stock, disponible, imagen, categoria_id)
+VALUES
+('Laptop', 1000.00, 100, 1, 'laptop.jpg', 1),
+('Televisor', 1806.00, 56, 1, 'televisor.jpg', 1),
+('Juego de comedor', 452.88, 23, 1, 'comedor.jpg', 2),
+('Camiseta', 32.00, 213, 1, 'camiseta.jpg', 3),
+('Zapatillas', 120.00, 61, 1, 'zapatillas.jpg', 3);
+GO

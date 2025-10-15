@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../Controllers/TiendaController.php';
+require_once __DIR__ . '/../../Models/Tienda.php';
 
 $id = intval($_GET['id'] ?? 0);
 

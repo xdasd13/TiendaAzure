@@ -14,7 +14,7 @@ Una moderna aplicación web para gestión de tienda virtual desarrollada en PHP 
 ## Tecnologías Utilizadas
 
 - **Backend**: PHP 7.4+
-- **Base de Datos**: MySQL
+- **Base de Datos**: Azure SQL Database (SQL Server)
 - **Frontend**: HTML5, CSS3, JavaScript
 - **Servidor**: Apache (XAMPP)
 - **Arquitectura**: MVC (Modelo-Vista-Controlador)
@@ -25,7 +25,8 @@ Una moderna aplicación web para gestión de tienda virtual desarrollada en PHP 
 
 - XAMPP instalado y funcionando
 - PHP 7.4 o superior
-- MySQL 5.7 o superior
+- Microsoft SQL Server Driver para PHP (sqlsrv y pdo_sqlsrv)
+- Acceso a Azure SQL Database
 
 ### Pasos de Instalación
 
@@ -36,18 +37,20 @@ Una moderna aplicación web para gestión de tienda virtual desarrollada en PHP 
 
 2. **Iniciar servicios de XAMPP**:
    - Apache
-   - MySQL
+   - Instalar drivers SQL Server para PHP si no están disponibles
 
-3. **Crear la base de datos**:
-   - Abrir phpMyAdmin (http://localhost/phpmyadmin)
+3. **Configurar Azure SQL Database**:
+   - Crear servidor Azure SQL Database
+   - Crear base de datos 'tiendaAlonso'
+   - Configurar reglas de firewall
    - Ejecutar el script SQL ubicado en `app/database/db.sql`
 
-4. **Configurar conexión a base de datos** (si es necesario):
-   - Editar `app/Models/Tienda.php`
-   - Modificar las credenciales de conexión:
+4. **Configurar conexión a base de datos**:
+   - La configuración se encuentra en `config/database.php`
+   - Para desarrollo local, las credenciales están configuradas para Azure:
      ```php
-     private $host = 'localhost';
-     private $dbname = 'tiendaAlonso';
+     'server' => 'tcp:tiendafabian.database.windows.net,1433',
+     'dbname' => 'tiendaAlonso',
      private $username = 'root';
      private $password = '';
      ```
@@ -152,9 +155,11 @@ tiendaAzure/
 ## Solución de Problemas
 
 ### Error de Conexión a Base de Datos
-- Verificar que MySQL esté ejecutándose
-- Comprobar credenciales en `Tienda.php`
+- Verificar que Azure SQL Database esté activo
+- Comprobar credenciales en `config/database.php`
+- Verificar reglas de firewall en Azure Portal
 - Asegurar que la base de datos `tiendaAlonso` existe
+- Verificar que los drivers sqlsrv estén instalados
 
 ### Imágenes No Se Muestran
 - Verificar permisos de escritura en `assets/images/productos/`
@@ -170,20 +175,3 @@ tiendaAzure/
 - Verificar versión de PHP (7.4+)
 - Comprobar que Apache esté ejecutándose
 - Revisar logs de error de Apache
-
-## Contribución
-
-Para contribuir al proyecto:
-1. Fork del repositorio
-2. Crear rama para nueva característica
-3. Commit de cambios
-4. Push a la rama
-5. Crear Pull Request
-
-## Licencia
-
-Este proyecto es de uso educativo y demostrativo.
-
-## Contacto
-
-Para soporte o consultas sobre el proyecto, contactar al desarrollador.

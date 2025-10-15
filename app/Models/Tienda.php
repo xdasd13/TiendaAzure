@@ -1,20 +1,15 @@
 <?php
 
+// Incluir la clase de conexión a base de datos
+require_once __DIR__ . '/../../config/database.php';
+
 class Tienda {
-    private $host = 'localhost';
-    private $dbname = 'tiendaAlonso';
-    private $username = 'root';
-    private $password = '';
     private $pdo;
 
     public function __construct() {
-        try {
-            $this->pdo = new PDO("mysql:host={$this->host};dbname={$this->dbname};charset=utf8", 
-                                $this->username, $this->password);
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-            die("Error de conexión: " . $e->getMessage());
-        }
+        // Obtener la conexión usando el patrón Singleton
+        $database = Database::getInstance();
+        $this->pdo = $database->getConnection();
     }
 
     public function obtenerProductosDisponibles() {

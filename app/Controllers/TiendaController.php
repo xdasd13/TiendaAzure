@@ -46,7 +46,7 @@ class TiendaController {
 
                 if ($this->validarDatos($datos)) {
                     if ($this->tienda->crearProducto($datos)) {
-                        header('Location: ../../index.php?mensaje=producto_creado');
+                        header('Location: listar.php?mensaje=producto_creado');
                         exit;
                     } else {
                         $error = "Error al crear el producto";
@@ -136,9 +136,9 @@ class TiendaController {
                 if ($producto && $producto['imagen']) {
                     ImageHelper::deleteImage($producto['imagen']);
                 }
-                header('Location: listar.php?mensaje=producto_eliminado');
+                header('Location: ../Views/Tienda/listar.php?mensaje=producto_eliminado');
             } else {
-                header('Location: listar.php?error=error_eliminar');
+                header('Location: ../Views/Tienda/listar.php?error=error_eliminar');
             }
             exit;
         }

@@ -477,7 +477,7 @@ $productos = $tienda->obtenerTodosLosProductos();
             <p id="deleteMessage">¿Estás seguro de que deseas eliminar este producto?</p>
             <div class="modal-actions">
                 <button onclick="cerrarModal()" class="btn btn-secondary">Cancelar</button>
-                <form id="deleteForm" method="POST" action="../../Controllers/TiendaController.php?accion=eliminar" style="display: inline;">
+                <form id="deleteForm" method="POST" action="../../Controllers/index.php?accion=eliminar" style="display: inline;">
                     <input type="hidden" id="deleteId" name="id" value="">
                     <button type="submit" class="btn btn-delete">Eliminar</button>
                 </form>

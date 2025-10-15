@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../Controllers/TiendaController.php';
+require_once __DIR__ . '/../Models/Tienda.php';
 
 if (!isset($productos)) {
     $tienda = new Tienda();
@@ -330,7 +330,7 @@ if (!isset($productos)) {
                             <div class="product-info">
                                 <div class="product-category"><?php echo htmlspecialchars($producto['categoria_nombre']); ?></div>
                                 <h3 class="product-name"><?php echo htmlspecialchars($producto['nomproducto']); ?></h3>
-                                <div class="product-price">$<?php echo number_format($producto['precio'], 2); ?></div>
+                                <div class="product-price">S/ <?php echo number_format($producto['precio'], 2); ?></div>
                                 <div class="product-stock">
                                     Stock: 
                                     <span class="<?php echo $producto['stock'] > 10 ? 'stock-available' : 'stock-low'; ?>">
