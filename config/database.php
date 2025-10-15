@@ -34,7 +34,15 @@ class Database {
             
         } catch (PDOException $e) {
             error_log("Error de conexión a base de datos: " . $e->getMessage());
-            die("Error de conexión a la base de datos. Por favor, contacte al administrador.");
+            error_log("Configuración usada - Server: " . $config['server'] . ", DB: " . $config['dbname'] . ", User: " . $config['username']);
+            error_log("Entorno Azure detectado: " . ($this->isAzureEnvironment() ? 'Sí' : 'No'));
+            
+            // En desarrollo, mostrar más detalles del error
+            if (!$this->isAzureEnvironment()) {
+                die("Error de conexión: " . $e->getMessage());
+            } else {
+                die("Error de conexión a la base de datos. Revise los logs para más detalles.");
+            }
         }
     }
     
@@ -45,7 +53,7 @@ class Database {
                 'server' => $_ENV['DB_SERVER'] ?? getenv('DB_SERVER') ?? 'tcp:tiendafabian.database.windows.net,1433',
                 'dbname' => $_ENV['DB_DATABASE'] ?? getenv('DB_DATABASE') ?? 'tiendaAlonso',
                 'username' => $_ENV['DB_USERNAME'] ?? getenv('DB_USERNAME') ?? 'fabian',
-                'password' => $_ENV['DB_PASSWORD'] ?? getenv('DB_PASSWORD') ?? ''
+                'password' => $_ENV['DB_PASSWORD'] ?? getenv('DB_PASSWORD') ?? 'tiendaAzure$z1'
             ];
         } else {
             // Configuración para desarrollo local (Azure SQL Database)
